@@ -2,20 +2,22 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/moell-peng/gin-gorm-example/controllers"
+	"go.xstore.local/go-hit-counter/controllers"
 )
 
 func InitRouter() *gin.Engine {
 	router := gin.Default()
 
+	// v1 := router.Group("/api/v1", middleware.Counter())
 	v1 := router.Group("/api/v1")
 	{
-		adminUser := new(controllers.AdminUser)
-		v1.GET("/admin-users", adminUser.Index)
-		v1.POST("/admin-users", adminUser.Store)
-		v1.PATCH("/admin-users/:id", adminUser.Update)
-		v1.DELETE("/admin-users/:id", adminUser.Destroy)
-		v1.GET("/admin-users/:id", adminUser.Show)
+		hitCounter := new(controllers.HitCounter)
+		v1.GET("/hit-counter", hitCounter.Index)
+		v1.GET("/count", hitCounter.Count)
+		v1.POST("/hit-counter", hitCounter.Store)
+		v1.PUT("/hit-counter/:id", hitCounter.Update)
+		v1.DELETE("/hit-counter/:id", hitCounter.Destroy)
+		v1.GET("/hit-counter/:id", hitCounter.Show)
 
 	}
 

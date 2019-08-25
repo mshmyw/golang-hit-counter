@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/moell-peng/gin-gorm-example/routes"
-	"github.com/moell-peng/gin-gorm-example/database"
-	"github.com/moell-peng/gin-gorm-example/config"
 	"fmt"
+
+	"go.xstore.local/go-hit-counter/config"
+	"go.xstore.local/go-hit-counter/database"
+	"go.xstore.local/go-hit-counter/routes"
 )
 
 func main() {
@@ -23,4 +24,3 @@ func main() {
 	router := routes.InitRouter()
 	router.Run(config.Get().Addr)
 }
-
