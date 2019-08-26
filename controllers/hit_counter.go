@@ -48,6 +48,39 @@ func (a *HitCounter) Count(c *gin.Context) {
 	a.JsonSuccess(c, http.StatusOK, gin.H{"data": *hitCounter.Count})
 }
 
+func (a *HitCounter) CountTag(c *gin.Context) {
+	// Return svg of count and add 1 to url
+	referer := c.DefaultQuery("url", c.Request.Referer())
+	url := utils.GetURL(referer)
+	if len(url) == 0 {
+		a.JsonFail(c, http.StatusBadRequest, "not found url")
+		return
+	}
+
+	valid_cookie := utils.CheckValidCookie(c, url)
+	if valid_cookie == false {
+		database.AddView(url)
+
+		duration := time.Minute * 5
+		c.SetCookie(
+			url, 
+			strconv.FormatInt(time.Now().Add(time.Minute*5).Unix(), 10),
+			int(duration.Seconds()),
+			"/", 
+			"localhost", 
+			false, 
+			true,
+		)
+	}
+
+	hitCounter := database.GetCount(url)
+	sizes := utils.CalculateSVGSizes(*hitCounter.Count)
+	svg := utils.GetSVG(*hitCounter.Count, sizes["width"], sizes["recWidth"], sizes["textX"], url)
+	// Response SVG
+	c.Data(200, "image/svg+xml;charset=utf-8", []byte(svg))	
+}		
+
+
 func (a *HitCounter) Index(c *gin.Context) {
 	var counters []models.HitCounter
 

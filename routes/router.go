@@ -14,6 +14,7 @@ func InitRouter() *gin.Engine {
 		hitCounter := new(controllers.HitCounter)
 		v1.GET("/hit-counter", hitCounter.Index)
 		v1.GET("/count", hitCounter.Count)
+		v1.GET("/count/tag.svg", hitCounter.CountTag)
 		v1.POST("/hit-counter", hitCounter.Store)
 		v1.PUT("/hit-counter/:id", hitCounter.Update)
 		v1.DELETE("/hit-counter/:id", hitCounter.Destroy)
